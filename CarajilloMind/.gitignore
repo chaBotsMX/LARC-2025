@@ -1,0 +1,7 @@
+.pio/
+.vscode/
+platformio_override.ini
+.cmake-build-*/
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
