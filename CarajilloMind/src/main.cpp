@@ -8,7 +8,7 @@ SensorColor sensor;
 
 void setup() {
   // put your setup code here, to run once:
-  Serial.begin(115200);
+  Serial.begin(9600);
   delay(1000);
 
   if (!sensor.begin()) {
@@ -20,13 +20,6 @@ void setup() {
 void loop() {
   // put your main code here, to run repeatedly:
   sensor.leerColor();
-
-  Serial.print("R: "); Serial.print(sensor.getR());
-  Serial.print("  G: "); Serial.print(sensor.getG());
-  Serial.print("  B: "); Serial.print(sensor.getB());
-  Serial.print("  C: "); Serial.println(sensor.getC());
-
-  delay(1000);
 }
 
 // put function definitions here:
