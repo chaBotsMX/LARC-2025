@@ -7,29 +7,32 @@ int myFunction(int, int);
 SensorColor sensor;
 
 void setup() {
-  // put your setup code here, to run once:
-  Serial.begin(115200);
-  delay(1000);
-
-  if (!sensor.begin()) {
-    Serial.println("Error: no se pudo inicializar el sensor de color.");
-    while (1); // Detener si no se detecta
-  }
+  initializeHardware();
+  calibrateSensors();
+  waitForStartButton();
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
-  sensor.leerColor();
-
-  Serial.print("R: "); Serial.print(sensor.getR());
-  Serial.print("  G: "); Serial.print(sensor.getG());
-  Serial.print("  B: "); Serial.print(sensor.getB());
-  Serial.print("  C: "); Serial.println(sensor.getC());
-
-  delay(1000);
+  switch(currentState) {
+      case MISSION_START:
+          executeHarvestMission();
+          break;
+      case MANUAL_MODE:
+          executeManualControl();
+          break;
+      case EMERGENCY_STOP:
+          handleEmergency();
+          break;
+  }
 }
 
-// put function definitions here:
-int myFunction(int x, int y) {
-  return x + y;
+void executeHarvestMission() {
+    // para los 3 árboles
+    for(int tree = 1; tree <= 3; tree++) {
+        navigateToTree(tree);
+        harvestTree(tree);
+        returnToProcessingFacility();
+        depositBeans();
+    }
+    celebrateVictory();
 }
