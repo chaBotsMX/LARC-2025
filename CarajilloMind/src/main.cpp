@@ -1,28 +1,35 @@
 #include <Arduino.h>
 #include "SensorColor.h"
+#include "ColorConverterLib.h"
+#include "SensorDistancia.h"
 
-// put function declarations here:
-int myFunction(int, int);
-
-SensorColor sensor;
+extern SensorColor sensorC;
+extern SensorDistancia sensorD;
 
 void setup() {
-  // put your setup code here, to run once:
   Serial.begin(9600);
   delay(1000);
 
-  if (!sensor.begin()) {
+  /*if (!sensorC.begin()) {
     Serial.println("Error: no se pudo inicializar el sensor de color.");
-    while (1); // Detener si no se detecta
+    while (1); 
+  }*/
+  if (!sensorD.begin()) {
+    Serial.println("Error: no se pudo inicializar el sensor de distancia.");
+    while (1); 
   }
+  //  calibre.
+  /*Serial.println("Coloque el sensor sobre una superficie blanca y presione Reset.");
+  delay(5000); // Espera 5 segundos para colocar el sensor.
+  sensorC.calibrarBlanco();
+  Serial.println("Comenzando lecturas...");*/
+  
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
-  sensor.leerColor();
-}
+ /* sensor.leerColor(); // Lee, normaliza y convierte.
+  sensorC.imprimir(); 
+  sensorC.definir(); 
+  delay(500); */
 
-// put function definitions here:
-int myFunction(int x, int y) {
-  return x + y;
 }
