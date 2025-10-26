@@ -1,10 +1,29 @@
 #include <Arduino.h>
-#include "SensorColor.h"
+#include <Wire.h>
 
-// put function declarations here:
-int myFunction(int, int);
+// Configuración
+#include "../lib/config/pins.h"
+#include "../lib/config/constants.h"
+#include "../lib/config/calibration.h"
 
-SensorColor sensor;
+// Drivers
+#include "../lib/drivers/motors.h"
+#include "../lib/drivers/sensors.h"
+#include "../lib/drivers/imu.h"
+#include "../lib/drivers/servos.h"
+
+// Navegación
+#include "../lib/navigation/movement.h"
+#include "../lib/navigation/line_follower.h"
+#include "../lib/navigation/obstacle_avoidance.h"
+
+// Recolección
+#include "../lib/collection/bean_detector.h"
+#include "../lib/collection/arm_control.h"
+#include "../lib/collection/carousel.h"
+
+// Estrategia
+#include "../lib/strategy/mission_manager.h"
 
 void setup() {
   initializeHardware();
