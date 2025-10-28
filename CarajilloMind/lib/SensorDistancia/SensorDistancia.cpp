@@ -39,6 +39,14 @@ void SensorDistancia::distancia() {
     }
 }
 
+float SensorDistancia::getDistanciaMm() {
+    if (lox.isRangeComplete()) {
+        uint16_t rango_mm = lox.readRange(); // La lectura está en mm
+        return (float)rango_mm; // Devolver en mm
+    }
+    return -1.0; // Valor de error si no hay lectura disponible
+}
+
 void SensorDistancia::pasar(uint16_t rango_mm) {
     if ((rango_mm/10.0 ) > 300) {
         openField = true;

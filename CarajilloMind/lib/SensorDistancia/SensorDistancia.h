@@ -11,6 +11,7 @@ public:
     bool begin(); // ¡Añadido! Necesitas inicializar el sensor D
     void distancia();
     void pasar(uint16_t rango_mm);
+    float getDistanciaMm();
 
 private:
     // Mantenemos el objeto aquí para una correcta encapsulación
