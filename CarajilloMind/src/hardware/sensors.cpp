@@ -13,16 +13,70 @@ void Sensors::init() {
     Wire.begin();
     Wire.setClock(400000); // 400kHz
     
-    // Inicializar IMU
-    if (!bno.begin()) {
-        Serial.println("Error: No se pudo inicializar BNO055");
+    Serial.println("Inicializando sensores ToF con multiplexor...");
+    
+    // --- Inicializar Sensor ToF Front Left en Canal 4 ---
+    selectMuxChannel(MUX_TOF_FL);
+    Serial.print("  Sensor ToF Front Left (Canal ");
+    Serial.print(MUX_TOF_FL);
+    Serial.print(")... ");
+    if (!tofFL.begin()) {
+        Serial.println("ERROR!");
+    } else {
+        Serial.println("OK!");
     }
-    bno.setExtCrystalUse(true);
+    delay(50);
+    
+    // --- Inicializar Sensor ToF Front Right en Canal 5 ---
+    selectMuxChannel(MUX_TOF_FR);
+    Serial.print("  Sensor ToF Front Right (Canal ");
+    Serial.print(MUX_TOF_FR);
+    Serial.print(")... ");
+    if (!tofFR.begin()) {
+        Serial.println("ERROR!");
+    } else {
+        Serial.println("OK!");
+    }
+    delay(50);
+    
+    // --- Inicializar Sensor ToF Rear Left en Canal 6 ---
+    selectMuxChannel(MUX_TOF_RL);
+    Serial.print("  Sensor ToF Rear Left (Canal ");
+    Serial.print(MUX_TOF_RL);
+    Serial.print(")... ");
+    if (!tofRL.begin()) {
+        Serial.println("ERROR!");
+    } else {
+        Serial.println("OK!");
+    }
+    delay(50);
+    
+    // --- Inicializar Sensor ToF Rear Right en Canal 7 ---
+    selectMuxChannel(MUX_TOF_RR);
+    Serial.print("  Sensor ToF Rear Right (Canal ");
+    Serial.print(MUX_TOF_RR);
+    Serial.print(")... ");
+    if (!tofRR.begin()) {
+        Serial.println("ERROR!");
+    } else {
+        Serial.println("OK!");
+    }
+    delay(50);
+    
+    // Inicializar IMU
+    Serial.print("Inicializando IMU BNO055... ");
+    if (!bno.begin()) {
+        Serial.println("ERROR! No se pudo inicializar BNO055");
+    } else {
+        Serial.println("OK!");
+        bno.setExtCrystalUse(true);
+    }
     
     delay(100);
 }
 
 void Sensors::selectMuxChannel(uint8_t channel) {
+    if (channel > 7) return;
     Wire.beginTransmission(I2C_MULTIPLEXER_ADDR);
     Wire.write(1 << channel);
     Wire.endTransmission();
@@ -35,11 +89,11 @@ void Sensors::updateAll() {
     lineData.rearLeft = readLineSensor(LINE_REAR_LEFT);
     lineData.rearRight = readLineSensor(LINE_REAR_RIGHT);
     
-    // Actualizar sensores de distancia
-    distanceData.frontLeft = readToF(MUX_TOF_FL);
-    distanceData.frontRight = readToF(MUX_TOF_FR);
-    distanceData.rearLeft = readToF(MUX_TOF_RL);
-    distanceData.rearRight = readToF(MUX_TOF_RR);
+    // Actualizar sensores de distancia ToF
+    distanceData.frontLeft = readToF(MUX_TOF_FL, tofFL);
+    distanceData.frontRight = readToF(MUX_TOF_FR, tofFR);
+    distanceData.rearLeft = readToF(MUX_TOF_RL, tofRL);
+    distanceData.rearRight = readToF(MUX_TOF_RR, tofRR);
     
     // Actualizar IMU
     sensors::event_t event;
@@ -54,22 +108,17 @@ bool Sensors::readLineSensor(int pin) {
     return value < LINE_THRESHOLD; // true si detecta línea negra
 }
 
-int Sensors::readToF(uint8_t channel) {
+int Sensors::readToF(uint8_t channel, Adafruit_VL53L0X &sensor) {
     selectMuxChannel(channel);
-    delay(5);
-    
-    Adafruit_VL53L0X lox;
-    if (!lox.begin()) {
-        return -1; // Error
-    }
+    delay(5); // Pequeño delay para estabilizar el multiplexor
     
     VL53L0X_RangingMeasurementData_t measure;
-    lox.rangingTest(&measure, false);
+    sensor.rangingTest(&measure, false);
     
-    if (measure.RangeStatus != 4) {
+    if (measure.RangeStatus != 4) { // Status 4 = fuera de rango
         return measure.RangeMilliMeter;
     }
-    return -1; // Fuera de rango
+    return -1; // Error o fuera de rango
 }
 
 LineSensorData Sensors::getLineSensors() {
@@ -108,8 +157,8 @@ bool Sensors::detectObstacleAhead() {
 
 bool Sensors::detectOpenPathBetweenPools() {
     // Si ambos ToF frontales detectan distancia larga = paso libre
-    return (distanceData.frontLeft > DISTANCE_POOL_MAX && 
-            distanceData.frontRight > DISTANCE_POOL_MAX);
+    return (distanceData.frontLeft > DISTANCE_POOL_MAX && distanceData.frontLeft > 0 &&
+            distanceData.frontRight > DISTANCE_POOL_MAX && distanceData.frontRight > 0);
 }
 
 ColorSensorData Sensors::readColorSensor(int sensorNumber) {

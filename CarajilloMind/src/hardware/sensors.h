@@ -4,7 +4,7 @@
 #include <Arduino.h>
 #include <Wire.h>
 #include <Adafruit_TCS34725.h>
-#include <Adafruit_VL53L0X.h>
+#include <Adafruit_VL53L0X.h>  // Ya está incluido
 #include <Adafruit_BNO055.h>
 #include "../config.h"
 
@@ -69,9 +69,15 @@ private:
     
     Adafruit_BNO055 bno;
     
+    // Objetos VL53L0X para cada sensor ToF
+    Adafruit_VL53L0X tofFL;  // Front Left
+    Adafruit_VL53L0X tofFR;  // Front Right
+    Adafruit_VL53L0X tofRL;  // Rear Left
+    Adafruit_VL53L0X tofRR;  // Rear Right
+    
     void selectMuxChannel(uint8_t channel);
     bool readLineSensor(int pin);
-    int readToF(uint8_t channel);
+    int readToF(uint8_t channel, Adafruit_VL53L0X &sensor);  // MODIFICADO
 };
 
 extern Sensors sensors;
