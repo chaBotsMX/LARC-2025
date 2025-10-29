@@ -12,23 +12,26 @@ public:
     void init();
     
     // Secuencia principal
-    void executeTreeRoutine(int treeNumber);
+    void executeLineRoutine(int lineNumber);
     
     // Módulos de navegación
     void exitStartingBox();
     void moveToRightBoundary();
+    void moveToLeftBoundary();
     void moveToTreeZone();
-    void alignWithTree(int treeNumber);
+    void collectLine(int lineNumber);
     void returnToProcessingFacility();
-    void positionForDeposit();
+    void depositBeans();
     
     // Navegación con obstáculos
-    void navigateAroundPools();
-    bool isPathClear();
+    void navigateAroundPoolForward();
+    void navigateAroundPoolBackward();
+    bool isPathClearForward();
+    bool isPathClearBackward();
     
 private:
-    int currentTree;
-    void adjustPositionForTree(int treeNumber);
+    int currentLine;
+    
 };
 
 extern RouteManager routeManager;
