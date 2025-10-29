@@ -36,7 +36,9 @@ void RouteManager::moveToTreeZone() {
     
     // Verificar si hay paso libre entre pools
     while (!isPathClear()) {
-        Serial.println("Esperando paso libre...");
+        Serial.println("alberca");
+        //ir hacia la izquierda hasta que esté libre
+        //implementar rodear obstáculo
         delay(100);
         sensors.updateAll();
     }

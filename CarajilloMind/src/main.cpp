@@ -20,8 +20,7 @@ void setup() {
     // Inicializar debug primero
     debug.init();
     Serial.println("Carajillo - chaBots Espresso");
-    Serial.println("LARC OPEN 2025");
-    Serial.println("Inicializando sistema...");
+    Serial.println("Inicializando");
     
     // Inicializar hardware
     motors.init();
@@ -47,7 +46,13 @@ void setup() {
     pinMode(START_BUTTON, INPUT_PULLUP);
     
     Serial.println("Sistema listo. Esperando botón de inicio...");
-    debug.printDivider();
+    //debug.printDivider();
+
+    // Configurar ganancias PID si quieres valores personalizados
+    lineFollowing.setPIDGains(2.5, 0.15, 0.8);  // Ajustar según pruebas
+    movement.setHeadingPIDGains(2.0, 0.05, 0.3);
+    
+    Serial.println("✓ PID configurado");
 }
 
 void waitForStartButton() {
@@ -60,7 +65,7 @@ void waitForStartButton() {
     }
     buttonPressed = true;
     startTime = millis();
-    Serial.println("¡INICIO! Botón presionado");
+    Serial.println("¡INICIO!");
 }
 
 bool isTimeout() {
