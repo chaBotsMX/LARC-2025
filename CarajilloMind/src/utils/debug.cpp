@@ -102,11 +102,5 @@ void Debug::printSystemStatus() {
     Serial.print(millis() / 1000);
     Serial.println(" segundos");
     
-    Serial.print("Granos maduros: ");
-    Serial.println(beanCollection.getRipeBeansCollected());
-    
-    Serial.print("Granos sobremaduros: ");
-    Serial.println(beanCollection.getOverripeBeansCollected());
-    
     printDivider();
 }

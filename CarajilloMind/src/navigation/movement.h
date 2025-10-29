@@ -8,6 +8,7 @@
 
 class Movement {
 public:
+    Movement() : targetHeading(0), headingPID(1.0, 0.0, 0.0, -100, 100) {}  // Inicializar PID con valores por defecto
     void init();
     
     // Movimientos con corrección de rumbo

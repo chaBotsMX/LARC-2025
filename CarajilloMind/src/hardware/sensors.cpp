@@ -82,6 +82,7 @@ void Sensors::selectMuxChannel(uint8_t channel) {
     Wire.endTransmission();
 }
 
+/*
 void Sensors::updateAll() {
     // Actualizar sensores de línea
     lineData.frontLeft = readLineSensor(LINE_FRONT_LEFT);
@@ -102,6 +103,7 @@ void Sensors::updateAll() {
     imuData.pitch = event.orientation.y;
     imuData.roll = event.orientation.z;
 }
+ */
 
 bool Sensors::readLineSensor(int pin) {
     int value = analogRead(pin);
@@ -125,27 +127,6 @@ LineSensorData Sensors::getLineSensors() {
     return lineData;
 }
 
-bool Sensors::isAtFrontLine() {
-    return lineData.frontLeft && lineData.frontRight;
-}
-
-bool Sensors::isAtRearLine() {
-    return lineData.rearLeft && lineData.rearRight;
-}
-
-bool Sensors::isAtLeftLine() {
-    return lineData.frontLeft && lineData.rearLeft;
-}
-
-bool Sensors::isAtRightLine() {
-    return lineData.frontRight && lineData.rearRight;
-}
-
-bool Sensors::isOutOfBounds() {
-    // Si cualquier sensor detecta línea en el límite
-    return isAtFrontLine() || isAtRearLine() || isAtLeftLine() || isAtRightLine();
-}
-
 DistanceSensorData Sensors::getDistanceSensors() {
     return distanceData;
 }
@@ -155,11 +136,6 @@ bool Sensors::detectObstacleAhead() {
            (distanceData.frontRight < DISTANCE_OBSTACLE_STOP && distanceData.frontRight > 0);
 }
 
-bool Sensors::detectOpenPathBetweenPools() {
-    // Si ambos ToF frontales detectan distancia larga = paso libre
-    return (distanceData.frontLeft > DISTANCE_POOL_MAX && distanceData.frontLeft > 0 &&
-            distanceData.frontRight > DISTANCE_POOL_MAX && distanceData.frontRight > 0);
-}
 
 ColorSensorData Sensors::readColorSensor(int sensorNumber) {
     ColorSensorData data;

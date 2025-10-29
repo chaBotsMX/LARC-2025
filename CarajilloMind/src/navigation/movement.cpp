@@ -49,225 +49,53 @@ float Movement::calculateHeadingCorrectionPID() {
 }
 
 
-void Movement::moveForwardTimed(int speed, unsigned long duration) {
+void Movement::moveForwardStraight(int speed) {
     unsigned long startTime = millis();
-    while (millis() - startTime < duration) {
-        sensors.updateAll();
-        if (sensors.isOutOfBounds() || sensors.detectObstacleAhead()) {
-            emergencyStop();
-            return;
-        }
+    while (millis() - startTime < 5000) {
         motors.moveForward(speed);
         delay(10);
     }
     motors.stop();
 }
 
-void Movement::moveBackwardTimed(int speed, unsigned long duration) {
+void Movement::moveBackwardStraight(int speed) {
     unsigned long startTime = millis();
-    while (millis() - startTime < duration) {
-        sensors.updateAll();
-        if (sensors.isOutOfBounds()) {
-            emergencyStop();
-            return;
-        }
+    while (millis() - startTime < 5000) {
         motors.moveBackward(speed);
         delay(10);
     }
     motors.stop();
 }
 
-void Movement::moveLeftTimed(int speed, unsigned long duration) {
+void Movement::moveLeftStraight(int speed) {
     unsigned long startTime = millis();
-    while (millis() - startTime < duration) {
-        sensors.updateAll();
-        if (sensors.isOutOfBounds()) {
-            emergencyStop();
-            return;
-        }
+    while (millis() - startTime < 5000) {
         motors.moveLeft(speed);
         delay(10);
     }
     motors.stop();
 }
 
-void Movement::moveRightTimed(int speed, unsigned long duration) {
+void Movement::moveRightStraight(int speed) {
     unsigned long startTime = millis();
-    while (millis() - startTime < duration) {
-        sensors.updateAll();
-        if (sensors.isOutOfBounds()) {
-            emergencyStop();
-            return;
-        }
+    while (millis() - startTime < 5000) {
         motors.moveRight(speed);
         delay(10);
     }
     motors.stop();
-}
+}   
 
-void Movement::moveForwardUntilLine(int speed) {
-    while (true) {
-        sensors.updateAll();
-        if (sensors.isAtFrontLine()) {
-            motors.stop();
-            return;
-        }
-        if (sensors.detectObstacleAhead()) {
-            emergencyStop();
-            return;
-        }
-        motors.moveForward(speed);
-        delay(10);
-    }
-}
 
-void Movement::moveBackwardUntilLine(int speed) {
-    while (true) {
-        sensors.updateAll();
-        if (sensors.isAtRearLine()) {
-            motors.stop();
-            return;
-        }
-        motors.moveBackward(speed);
-        delay(10);
-    }
-}
-
-void Movement::moveLeftUntilLine(int speed) {
-    while (true) {
-        sensors.updateAll();
-        if (sensors.isAtLeftLine()) {
-            motors.stop();
-            return;
-        }
-        motors.moveLeft(speed);
-        delay(10);
-    }
-}
-
-void Movement::moveRightUntilLine(int speed) {
-    while (true) {
-        sensors.updateAll();
-        if (sensors.isAtRightLine()) {
-            motors.stop();
-            return;
-        }
-        motors.moveRight(speed);
-        delay(10);
-    }
-}
-
-// Funciones originales con corrección simple
-void Movement::moveForwardStraight(int speed, unsigned long duration) {
-    updateTargetHeading();
-    unsigned long startTime = millis();
-    
-    while (millis() - startTime < duration) {
-        sensors.updateAll();
-        if (sensors.isOutOfBounds() || sensors.detectObstacleAhead()) {
-            emergencyStop();
-            return;
-        }
-        
-        int correction = calculateHeadingCorrection();
-        motors.moveDirection(0, speed, correction);
-        delay(10);
-    }
-    motors.stop();
-}
-
-void Movement::moveLeftStraight(int speed, unsigned long duration) {
-    updateTargetHeading();
-    unsigned long startTime = millis();
-    
-    while (millis() - startTime < duration) {
-        sensors.updateAll();
-        if (sensors.isOutOfBounds()) {
-            emergencyStop();
-            return;
-        }
-        
-        int correction = calculateHeadingCorrection();
-        motors.moveDirection(-speed, 0, correction);
-        delay(10);
-    }
-    motors.stop();
-}
-
-void Movement::moveRightStraight(int speed, unsigned long duration) {
-    updateTargetHeading();
-    unsigned long startTime = millis();
-    
-    while (millis() - startTime < duration) {
-        sensors.updateAll();
-        if (sensors.isOutOfBounds()) {
-            emergencyStop();
-            return;
-        }
-        
-        int correction = calculateHeadingCorrection();
-        motors.moveDirection(speed, 0, correction);
-        delay(10);
-    }
-    motors.stop();
-}
-
-// NUEVAS FUNCIONES CON PID
-void Movement::moveForwardStraightPID(int speed, unsigned long duration) {
-    updateTargetHeading();
-    headingPID.setSetpoint(0); // Error = 0 cuando estamos en el rumbo correcto
-    headingPID.reset();
-    
-    unsigned long startTime = millis();
-    
-    while (millis() - startTime < duration) {
-        sensors.updateAll();
-        if (sensors.isOutOfBounds() || sensors.detectObstacleAhead()) {
-            emergencyStop();
-            return;
-        }
-        
-        float correction = calculateHeadingCorrectionPID();
-        motors.moveDirection(0, speed, (int)correction);
-        delay(10);
-    }
-    motors.stop();
-}
-
-void Movement::moveLeftStraightPID(int speed, unsigned long duration) {
+/*
+void Movement::moveRightStraightPID(int speed) {
     updateTargetHeading();
     headingPID.setSetpoint(0);
     headingPID.reset();
     
     unsigned long startTime = millis();
     
-    while (millis() - startTime < duration) {
+    while (millis() - startTime < 6000) {
         sensors.updateAll();
-        if (sensors.isOutOfBounds()) {
-            emergencyStop();
-            return;
-        }
-        
-        float correction = calculateHeadingCorrectionPID();
-        motors.moveDirection(-speed, 0, (int)correction);
-        delay(10);
-    }
-    motors.stop();
-}
-
-void Movement::moveRightStraightPID(int speed, unsigned long duration) {
-    updateTargetHeading();
-    headingPID.setSetpoint(0);
-    headingPID.reset();
-    
-    unsigned long startTime = millis();
-    
-    while (millis() - startTime < duration) {
-        sensors.updateAll();
-        if (sensors.isOutOfBounds()) {
-            emergencyStop();
-            return;
-        }
         
         float correction = calculateHeadingCorrectionPID();
         motors.moveDirection(speed, 0, (int)correction);
@@ -276,7 +104,9 @@ void Movement::moveRightStraightPID(int speed, unsigned long duration) {
     motors.stop();
 }
 
-void Movement::emergencyStop() {
+*/
+
+void Movement::stop() {
     motors.stop();
-    Serial.println("EMERGENCIA: Robot detenido");
+    Serial.println("Robot detenido");
 }

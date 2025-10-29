@@ -1,6 +1,6 @@
 #include "pid.h"
 
-PID::PID(float kp, float ki, float kd, float outputMin, float outputMax) {
+PID::PID(float kp=1, float ki=1, float kd=1, float outputMin=-100, float outputMax=100) {
     this->kp = kp;
     this->ki = ki;
     this->kd = kd;

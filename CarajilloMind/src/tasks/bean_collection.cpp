@@ -120,7 +120,7 @@ void BeanCollection::collectAllBeansFromTree() {
     Serial.println("Iniciando recolección de árbol completo");
     
     // Recolectar desde nivel bajo
-    collectFromLevel(LOW);
+    collectFromLevel(LOWER);
     delay(500);
     
     // Recolectar desde nivel medio
@@ -128,7 +128,7 @@ void BeanCollection::collectAllBeansFromTree() {
     delay(500);
     
     // Recolectar desde nivel alto
-    collectFromLevel(HIGH);
+    collectFromLevel(UPPER);
     delay(500);
     
     Serial.println("Recolección completada");
