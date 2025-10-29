@@ -1,0 +1,37 @@
+teensy                            ARDUINO
+
+MOTORES 1-4       
+    GPIO 0 1                D 11 10
+    GPIO 2 3       -->      D 9 8
+    GPIO 4 5                D 7 6
+    GPIO 6 7                D 5 4
+
+LEDs
+    GPIO 10, 11, 12, 26, 27, 28, 29, 30, 31, 32
+    -->
+    D22 al D31
+
+MULTIPLEXOR
+    24 SCL, 25 SDA     -->      D21 SCL, D20 SDA
+
+BNO055
+    SDA 1, SCL 1
+
+MOTOR A PASOS
+    SCL, SDA
+
+SENSORES DE DISTANCIA
+    SCL 4, SDA 4
+    SCL 5, SDA 5
+    SCL 6, SDA 6
+    SCL 7, SDA 7
+
+SENSORES DE COLOR
+    SCL 0
+    SCL 1
+    SCL 2
+
+
+STEP MOTOR      
+    DIR GPIO08, STEP GPIO09     -->     DIR D13, STEP D12
+

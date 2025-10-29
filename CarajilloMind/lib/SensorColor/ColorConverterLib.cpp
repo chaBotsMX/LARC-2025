@@ -1,5 +1,6 @@
 
 #include "ColorConverterLib.h"
+#include <Arduino.h>
 
 void ColorConverter::RgbToHsv(uint8_t red, uint8_t green, uint8_t blue, double& hue, double& saturation, double& value)
 {
