@@ -43,16 +43,19 @@ public:
     
     // Line sensors
     LineSensorData getLineSensors();
+    /*
     bool isAtFrontLine();
     bool isAtRearLine();
     bool isAtLeftLine();
     bool isAtRightLine();
     bool isOutOfBounds();
+    */
+    
     
     // Distance sensors (ToF)
     DistanceSensorData getDistanceSensors();
     bool detectObstacleAhead();
-    bool detectOpenPathBetweenPools();
+    bool detectObstacleBehind();
     
     // Color sensors
     ColorSensorData readColorSensor(int sensorNumber);

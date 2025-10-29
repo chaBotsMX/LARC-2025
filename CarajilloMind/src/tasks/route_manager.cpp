@@ -3,18 +3,16 @@
 RouteManager routeManager;
 
 void RouteManager::init() {
-    currentTree = 0;
+    currentLine = 0;
 }
 
 void RouteManager::exitStartingBox() {
     Serial.println("Saliendo del cuadro de inicio");
     
     // Avanzar hasta salir del cuadro
-    movement.moveForwardUntilLine(BASE_SPEED);
+    movement.moveForwardUntilBackLine(BASE_SPEED);
     delay(200);
     
-    // Pequeño ajuste para quedar completamente fuera
-    movement.moveForwardTimed(SLOW_SPEED, 500);
     motors.stop();
     
     Serial.println("Fuera del cuadro de inicio");
@@ -24,7 +22,7 @@ void RouteManager::moveToRightBoundary() {
     Serial.println("Moviéndose al límite derecho");
     
     // Moverse a la derecha siguiendo la línea hasta encontrar el borde
-    lineFollowing.followLineRight(BASE_SPEED);
+    movement.moveRightUntilRightLineFollowingLine(BASE_SPEED);
     delay(200);
     
     motors.stop();
@@ -35,133 +33,131 @@ void RouteManager::moveToTreeZone() {
     Serial.println("Avanzando hacia zona de árboles");
     
     // Verificar si hay paso libre entre pools
-    while (!isPathClear()) {
+    while (!isPathClearForward()) {
         Serial.println("alberca");
-        //ir hacia la izquierda hasta que esté libre
         //implementar rodear obstáculo
+        routeManager.navigateAroundPoolForward();
         delay(100);
         sensors.updateAll();
     }
     
     // Avanzar hasta la línea de los árboles
-    lineFollowing.followLineForward(BASE_SPEED);
+    movement.moveForwardUntilFrontLineFollowingLine(BASE_SPEED);
     delay(200);
     
     motors.stop();
     Serial.println("En zona de árboles");
 }
 
-void RouteManager::adjustPositionForTree(int treeNumber) {
-    // Calcular distancia lateral según número de árbol
-    // Árbol 1: más a la derecha
-    // Árbol 2: centro
-    // Árbol 3: más a la izquierda
+void RouteManager::collectLine(int lineNumber) {
+    Serial.print("Recolectando línea ");
+    Serial.println(lineNumber);
     
-    unsigned long lateralTime = 0;
+    currentLine = lineNumber;
     
-    switch (treeNumber) {
-        case 1:
-            lateralTime = 500; // Poco desplazamiento
-            break;
-        case 2:
-            lateralTime = 2000; // Desplazamiento medio
-            break;
-        case 3:
-            lateralTime = 3500; // Mayor desplazamiento
-            break;
+    //Moverte al siguiente grano de café
+    int iterations = (lineNumber == 1) ? 15 : (lineNumber == 2) ? 18 : 15;
+    for (int i = 0; i < iterations; i++) {
+        movement.moveToNextBean(BASE_SPEED, lineNumber);
+        delay(100);
     }
     
-    if (lateralTime > 0) {
-        movement.moveLeftTimed(BASE_SPEED, lateralTime);
-        delay(200);
-    }
+    motors.stop();
+    Serial.println("Línea recolectada");
 }
 
-void RouteManager::alignWithTree(int treeNumber) {
-    Serial.print("Alineándose con árbol ");
-    Serial.println(treeNumber);
+void RouteManager::moveToLeftBoundary() {
+    Serial.println("Moviéndose al límite izquierdo");
     
-    currentTree = treeNumber;
-    
-    // Moverse lateralmente a la posición del árbol
-    adjustPositionForTree(treeNumber);
-    
-    // Avanzar un poco más hacia el árbol
-    movement.moveForwardTimed(SLOW_SPEED, 1000);
+    // Moverse a la izquierda siguiendo la línea hasta encontrar el borde
+    movement.moveLeftUntilLeftLineFollowingLine(BASE_SPEED);
     delay(200);
     
     motors.stop();
-    Serial.println("Alineado con árbol");
+    Serial.println("En límite izquierdo");
 }
 
-bool RouteManager::isPathClear() {
+bool RouteManager::isPathClearForward() {
     sensors.updateAll();
-    return sensors.detectOpenPathBetweenPools();
+    return !sensors.detectObstacleAhead();
 }
 
-void RouteManager::navigateAroundPools() {
+bool RouteManager::isPathClearBackward() {
+    sensors.updateAll();
+    return !sensors.detectObstacleBehind();
+}
+
+void RouteManager::navigateAroundPoolForward() {
     // Si no hay paso directo, intentar navegar alrededor
     Serial.println("Navegando alrededor de obstáculos");
     
-    // Estrategia simple: moverse lateralmente
-    movement.moveLeftTimed(BASE_SPEED, 1000);
+    movement.moveLeftUntilObstacleClear(BASE_SPEED);
+    delay(200);
+
+    movement.moveForwardUntilObstacleClear(BASE_SPEED);
     delay(200);
     
-    movement.moveForwardTimed(BASE_SPEED, 2000);
-    delay(200);
-    
-    movement.moveRightTimed(BASE_SPEED, 1000);
+    movement.moveRightUntilRightLine(BASE_SPEED);
     delay(200);
 }
 
+void RouteManager::navigateAroundPoolBackward() {
+    // Si no hay paso directo, intentar navegar alrededor
+    Serial.println("Navegando alrededor de obstáculos (retrocediendo)");
+    
+    movement.moveRightUntilObstacleClear(BASE_SPEED);
+    delay(200);
+
+    movement.moveBackwardUntilObstacleClear(BASE_SPEED);
+    delay(200);
+    
+    movement.moveLeftUntilLeftLine(BASE_SPEED);
+    delay(200);
+}
+
+
 void RouteManager::returnToProcessingFacility() {
     Serial.println("Regresando a instalación de procesamiento");
-    
-    // Retroceder un poco del árbol
-    movement.moveBackwardTimed(SLOW_SPEED, 1000);
-    delay(200);
-    
-    // Moverse a la derecha hasta el límite
-    lineFollowing.followLineRight(BASE_SPEED);
-    delay(200);
-    
-    // Verificar paso libre
-    while (!isPathClear()) {
-        Serial.println("Esperando paso libre para regresar...");
+
+    // Verificar si hay paso libre entre pools
+    while (!isPathClearBackward()) {
+        Serial.println("alberca");
+        //implementar rodear obstáculo
+        routeManager.navigateAroundPoolBackward();
         delay(100);
         sensors.updateAll();
     }
     
-    // Retroceder hasta la zona de procesamiento
-    lineFollowing.followLineBackward(BASE_SPEED);
+    // Avanzar hasta la línea de inicio
+    movement.moveBackwardUntilBackLineFollowingLine(BASE_SPEED);
     delay(200);
     
     motors.stop();
-    Serial.println("De regreso en zona de procesamiento");
+    Serial.println("En zona de procesamiento");
+    
 }
 
-void RouteManager::positionForDeposit() {
-    Serial.println("Posicionándose para depositar granos");
-    
-    // Ajustes finos para quedar frente a los contenedores
-    movement.moveLeftTimed(ALIGN_SPEED, 1500);
+void RouteManager::depositBeans() {
+    Serial.println("Iniciando el depósito de granos");
+
+    movement.moveToDepositBox(ALIGN_SPEED, 1);
     delay(200);
-    
-    movement.moveForwardTimed(ALIGN_SPEED, 500);
+
+    movement.moveToDepositBox(ALIGN_SPEED, 2);
     delay(200);
     
     motors.stop();
     Serial.println("Posicionado para depósito");
 }
 
-void RouteManager::executeTreeRoutine(int treeNumber) {
+void RouteManager::executeLineRoutine(int lineNumber) {
     Serial.println("=================================");
-    Serial.print("Ejecutando rutina para árbol ");
-    Serial.println(treeNumber);
+    Serial.print("Ejecutando rutina para línea ");
+    Serial.println(lineNumber);
     Serial.println("=================================");
     
     // 1. Salir del cuadro (solo la primera vez)
-    if (treeNumber == 1) {
+    if (lineNumber == 1) {
         exitStartingBox();
         delay(500);
     }
@@ -174,12 +170,12 @@ void RouteManager::executeTreeRoutine(int treeNumber) {
     moveToTreeZone();
     delay(500);
     
-    // 4. Alinearse con el árbol específico
-    alignWithTree(treeNumber);
+    // 4. Recolectar línea de árboles
+    collectLine(lineNumber);
     delay(500);
     
-    // 5. Recolectar granos
-    beanCollection.collectAllBeansFromTree();
+    // 5. Moverse al limite izquierdo
+    moveToLeftBoundary();
     delay(1000);
     
     // 6. Regresar a zona de procesamiento
@@ -187,13 +183,9 @@ void RouteManager::executeTreeRoutine(int treeNumber) {
     delay(500);
     
     // 7. Posicionarse para depositar
-    positionForDeposit();
+    depositBeans();
     delay(500);
     
-    // 8. Depositar granos
-    beanCollection.depositAllBeans();
-    delay(1000);
-    
-    Serial.println("Rutina de árbol completada");
+    Serial.println("Rutina de línea completada");
     Serial.println("=================================");
 }

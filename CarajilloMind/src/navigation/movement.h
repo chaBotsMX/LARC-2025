@@ -10,30 +10,49 @@ class Movement {
 public:
     void init();
     
-    // Movimientos básicos con tiempo
-    void moveForwardTimed(int speed, unsigned long duration);
-    void moveBackwardTimed(int speed, unsigned long duration);
-    void moveLeftTimed(int speed, unsigned long duration);
-    void moveRightTimed(int speed, unsigned long duration);
-    
-    // Movimientos hasta detectar línea
-    void moveForwardUntilLine(int speed);
-    void moveBackwardUntilLine(int speed);
-    void moveLeftUntilLine(int speed);
-    void moveRightUntilLine(int speed);
-    
     // Movimientos con corrección de rumbo
-    void moveForwardStraight(int speed, unsigned long duration);
-    void moveLeftStraight(int speed, unsigned long duration);
-    void moveRightStraight(int speed, unsigned long duration);
+    void moveForwardStraight(int speed);
+    void moveBackwardStraight(int speed);
+    void moveLeftStraight(int speed);
+    void moveRightStraight(int speed);
+
+    // Movimiento siguiendo la línea
+    void moveForwardWithLine(int speed);
+    void moveBackwardWithLine(int speed);
+    void moveLeftWithLine(int speed);
+    void moveRightWithLine(int speed);
+
+    void moveForwardUntilBackLine(int speed);
+    void moveBackwardUntilFrontLine(int speed);
+    void moveRightUntilRightLineFollowingLine(int speed);
+    void moveForwardUntilFrontLineFollowingLine(int speed);
+    void moveLeftUntilLeftLineFollowingLine(int speed);
+    void moveBackwardUntilBackLineFollowingLine(int speed);
+
+    void moveRightUntilRightLine(int speed);
+    void moveLeftUntilLeftLine(int speed);
     
     // Movimientos con PID (más suave)
-    void moveForwardStraightPID(int speed, unsigned long duration);  // NUEVO
-    void moveLeftStraightPID(int speed, unsigned long duration);     // NUEVO
-    void moveRightStraightPID(int speed, unsigned long duration);    // NUEVO
-    
-    // Parada de emergencia
-    void emergencyStop();
+    void moveForwardStraightPID(int speed);
+    void moveBackwardStraightPID(int speed);
+    void moveLeftStraightPID(int speed);
+    void moveRightStraightPID(int speed);
+
+    // Rodear alberca
+    void moveLeftUntilObstacleClear(int speed);
+    void moveRightUntilObstacleClear(int speed);
+    void moveForwardUntilObstacleClear(int speed);
+    void moveBackwardUntilObstacleClear(int speed);
+
+    // Moverte al siguiente grano de café
+    // siguiendo la línea
+    void moveToNextBean(int speed, int level=1);
+
+    //Moverte a las cajas de depósito
+    void moveToDepositBox(int speed, int boxNumber);
+
+    // Parada
+    void stop();
     
     // Configuración PID
     void setHeadingPIDGains(float kp, float ki, float kd);  // NUEVO

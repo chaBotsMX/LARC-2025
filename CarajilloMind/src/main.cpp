@@ -55,15 +55,8 @@ void setup() {
     Serial.println("✓ PID configurado");
 }
 
-void waitForStartButton() {
-    while (digitalRead(START_BUTTON) == HIGH) {
-        delay(10);
-    }
-    delay(50); // Debounce
-    while (digitalRead(START_BUTTON) == LOW) {
-        delay(10);
-    }
-    buttonPressed = true;
+void waitForStart() {
+    delay(5000); // Esperar 5 segundos antes de iniciar
     startTime = millis();
     Serial.println("¡INICIO!");
 }
@@ -72,6 +65,7 @@ bool isTimeout() {
     return (millis() - startTime) > MAX_RUNTIME;
 }
 
+/*
 void checkSafetyConditions() {
     sensors.updateAll();
     
@@ -91,11 +85,12 @@ void checkSafetyConditions() {
         return;
     }
 }
+*/
 
 void executeStateMachine() {
     switch (currentState) {
         case INIT:
-            waitForStartButton();
+            waitForStart();
             currentState = EXIT_BOX;
             break;
             
@@ -194,7 +189,7 @@ void loop() {
     
     // Verificar condiciones de seguridad continuamente
     if (currentState != INIT && currentState != COMPLETE && currentState != ERROR) {
-        checkSafetyConditions();
+        //checkSafetyConditions();
     }
     
     // Pequeño delay para no saturar el procesador
