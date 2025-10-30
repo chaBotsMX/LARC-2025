@@ -50,39 +50,74 @@ float Movement::calculateHeadingCorrectionPID() {
 
 
 void Movement::moveForwardStraight(int speed) {
-    unsigned long startTime = millis();
-    while (millis() - startTime < 5000) {
-        motors.moveForward(speed);
-        delay(10);
-    }
+    motors.moveForward(speed);
+    delay(3000);
     motors.stop();
+    /*
+    unsigned long startTime = 0;
+    static bool running = false;
+
+    if (!running) {
+        startTime = millis();
+        motors.moveForward(speed);
+        running = true;
+    }
+    
+    if (millis() - startTime >= 5000) {
+        motors.stop();
+        running = false;
+    }
+        */
 }
 
 void Movement::moveBackwardStraight(int speed) {
-    unsigned long startTime = millis();
-    while (millis() - startTime < 5000) {
+    unsigned long startTime = 0;
+    static bool running = false;
+
+    if (!running) {
+        startTime = millis();
         motors.moveBackward(speed);
-        delay(10);
+        running = true;
     }
-    motors.stop();
+
+    if (millis() - startTime >= 5000) {
+        motors.stop();
+        running = false;
+    }
 }
 
 void Movement::moveLeftStraight(int speed) {
-    unsigned long startTime = millis();
-    while (millis() - startTime < 5000) {
+    unsigned long startTime = 0;
+    static bool running = false;
+
+    if (!running) {
+        startTime = millis();
         motors.moveLeft(speed);
-        delay(10);
+        running = true;
     }
-    motors.stop();
+
+    if (millis() - startTime >= 5000) {
+        motors.stop();
+        running = false;
+    }
 }
 
+
 void Movement::moveRightStraight(int speed) {
-    unsigned long startTime = millis();
-    while (millis() - startTime < 5000) {
+    unsigned long startTime = 0;
+    static bool running = false;
+
+    if (!running) {
+        startTime = millis();
         motors.moveRight(speed);
-        delay(10);
+        running = true;
     }
-    motors.stop();
+    
+    if (millis() - startTime >= 5000) {
+        motors.stop();
+        running = false;
+    }
+    
 }   
 
 

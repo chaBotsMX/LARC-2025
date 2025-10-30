@@ -18,7 +18,8 @@ const unsigned long MAX_RUNTIME = 500000; // 8 minutos en milisegundos
 
 void setup() {
     // Inicializar debug primero
-    debug.init();
+    //debug.init();
+    Serial.begin(9600);
     Serial.println("Carajillo - chaBots Espresso");
     Serial.println("Inicializando");
     
@@ -161,18 +162,27 @@ void executeStateMachine() {
 
 void pruebaMovimiento() {
     Serial.println("Iniciando prueba de movimiento");
+    delay(3000);
     
+    Serial.println("Moviendo hacia adelante");
     movement.moveForwardStraight(BASE_SPEED);
     delay(4000);
+    Serial.println("¿se movió?");
     
+    Serial.println("Moviendo hacia atrás");
     movement.moveBackwardStraight(BASE_SPEED);
     delay(4000);
+    Serial.println("¿se movió? v2");
     
+    Serial.println("Moviendo hacia izquierda");
     movement.moveLeftStraight(BASE_SPEED);
     delay(4000);
-    
+    Serial.println("¿se movió? v3");
+
+    Serial.println("Moviendo hacia derecha");
     movement.moveRightStraight(BASE_SPEED);
     delay(4000);
+    Serial.println("¿se movió? v4");
     
     motors.stop();
     Serial.println("Prueba de movimiento completada");

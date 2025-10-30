@@ -20,16 +20,16 @@ void Motors::init() {
 }
 
 void Motors::setMotor(int in1, int in2, int speed) {
-    speed = constrainSpeed(speed);
+    //speed = constrainSpeed(speed);
     if (speed > 0) {
         digitalWrite(in1, HIGH);
-        digitalWrite(in2, LOW);
-    } else if (speed < 0) {
-        digitalWrite(in1, LOW);
         digitalWrite(in2, HIGH);
+    } else if (speed < 0) {
+        digitalWrite(in1, HIGH);
+        digitalWrite(in2, LOW);
     } else {
         digitalWrite(in1, LOW);
-        digitalWrite(in2, LOW);
+        digitalWrite(in2, HIGH);
     }
 }
 
@@ -38,32 +38,32 @@ int Motors::constrainSpeed(int speed) {
 }
 
 void Motors::moveForward(int speed) {
-    setMotor(MOTOR_FL_IN1, MOTOR_FL_IN2, speed);
-    setMotor(MOTOR_FR_IN1, MOTOR_FR_IN2, 0);
-    setMotor(MOTOR_RL_IN1, MOTOR_RL_IN2, 0);
-    setMotor(MOTOR_RR_IN1, MOTOR_RR_IN2, -speed);
+    setMotor(MOTOR_FL_IN1, MOTOR_FL_IN2, 0);
+    setMotor(MOTOR_FR_IN1, MOTOR_FR_IN2, speed);
+    setMotor(MOTOR_RL_IN1, MOTOR_RL_IN2, speed);
+    setMotor(MOTOR_RR_IN1, MOTOR_RR_IN2, 0);
 }
 
 void Motors::moveBackward(int speed) {
-    setMotor(MOTOR_FL_IN1, MOTOR_FL_IN2, -speed);
+    setMotor(MOTOR_FL_IN1, MOTOR_FL_IN2, 0);
+    setMotor(MOTOR_FR_IN1, MOTOR_FR_IN2, -speed);
+    setMotor(MOTOR_RL_IN1, MOTOR_RL_IN2, -speed);
+    setMotor(MOTOR_RR_IN1, MOTOR_RR_IN2, 0);
+}
+
+void Motors::moveLeft(int speed) {
+    // Configuración para ruedas omnidireccionales
+    setMotor(MOTOR_FL_IN1, MOTOR_FL_IN2, speed);
     setMotor(MOTOR_FR_IN1, MOTOR_FR_IN2, 0);
     setMotor(MOTOR_RL_IN1, MOTOR_RL_IN2, 0);
     setMotor(MOTOR_RR_IN1, MOTOR_RR_IN2, speed);
 }
 
-void Motors::moveLeft(int speed) {
-    // Configuración para ruedas omnidireccionales
-    setMotor(MOTOR_FL_IN1, MOTOR_FL_IN2, 0);
-    setMotor(MOTOR_FR_IN1, MOTOR_FR_IN2, speed);
-    setMotor(MOTOR_RL_IN1, MOTOR_RL_IN2, -speed);
-    setMotor(MOTOR_RR_IN1, MOTOR_RR_IN2, 0);
-}
-
 void Motors::moveRight(int speed) {
-    setMotor(MOTOR_FL_IN1, MOTOR_FL_IN2, 0);
-    setMotor(MOTOR_FR_IN1, MOTOR_FR_IN2, -speed);
-    setMotor(MOTOR_RL_IN1, MOTOR_RL_IN2, speed);
-    setMotor(MOTOR_RR_IN1, MOTOR_RR_IN2, 0);
+    setMotor(MOTOR_FL_IN1, MOTOR_FL_IN2, -speed);
+    setMotor(MOTOR_FR_IN1, MOTOR_FR_IN2, 0);
+    setMotor(MOTOR_RL_IN1, MOTOR_RL_IN2, 0);
+    setMotor(MOTOR_RR_IN1, MOTOR_RR_IN2, -speed);
 }
 
 void Motors::stop() {
