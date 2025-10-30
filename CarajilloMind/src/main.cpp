@@ -163,16 +163,16 @@ void pruebaMovimiento() {
     Serial.println("Iniciando prueba de movimiento");
     
     movement.moveForwardStraight(BASE_SPEED);
-    delay(1000);
+    delay(4000);
     
     movement.moveBackwardStraight(BASE_SPEED);
-    delay(1000);
+    delay(4000);
     
     movement.moveLeftStraight(BASE_SPEED);
-    delay(1000);
+    delay(4000);
     
     movement.moveRightStraight(BASE_SPEED);
-    delay(1000);
+    delay(4000);
     
     motors.stop();
     Serial.println("Prueba de movimiento completada");

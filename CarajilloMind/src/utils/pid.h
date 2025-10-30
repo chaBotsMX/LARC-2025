@@ -5,6 +5,7 @@
 
 class PID {
 public:
+    PID();
     PID(float kp, float ki, float kd, float outputMin, float outputMax);
     
     void setGains(float kp, float ki, float kd);

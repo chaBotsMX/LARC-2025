@@ -39,31 +39,31 @@ int Motors::constrainSpeed(int speed) {
 
 void Motors::moveForward(int speed) {
     setMotor(MOTOR_FL_IN1, MOTOR_FL_IN2, speed);
-    setMotor(MOTOR_FR_IN1, MOTOR_FR_IN2, speed);
-    setMotor(MOTOR_RL_IN1, MOTOR_RL_IN2, speed);
-    setMotor(MOTOR_RR_IN1, MOTOR_RR_IN2, speed);
+    setMotor(MOTOR_FR_IN1, MOTOR_FR_IN2, 0);
+    setMotor(MOTOR_RL_IN1, MOTOR_RL_IN2, 0);
+    setMotor(MOTOR_RR_IN1, MOTOR_RR_IN2, -speed);
 }
 
 void Motors::moveBackward(int speed) {
     setMotor(MOTOR_FL_IN1, MOTOR_FL_IN2, -speed);
-    setMotor(MOTOR_FR_IN1, MOTOR_FR_IN2, -speed);
-    setMotor(MOTOR_RL_IN1, MOTOR_RL_IN2, -speed);
-    setMotor(MOTOR_RR_IN1, MOTOR_RR_IN2, -speed);
+    setMotor(MOTOR_FR_IN1, MOTOR_FR_IN2, 0);
+    setMotor(MOTOR_RL_IN1, MOTOR_RL_IN2, 0);
+    setMotor(MOTOR_RR_IN1, MOTOR_RR_IN2, speed);
 }
 
 void Motors::moveLeft(int speed) {
     // Configuración para ruedas omnidireccionales
-    setMotor(MOTOR_FL_IN1, MOTOR_FL_IN2, -speed);
+    setMotor(MOTOR_FL_IN1, MOTOR_FL_IN2, 0);
     setMotor(MOTOR_FR_IN1, MOTOR_FR_IN2, speed);
-    setMotor(MOTOR_RL_IN1, MOTOR_RL_IN2, speed);
-    setMotor(MOTOR_RR_IN1, MOTOR_RR_IN2, -speed);
+    setMotor(MOTOR_RL_IN1, MOTOR_RL_IN2, -speed);
+    setMotor(MOTOR_RR_IN1, MOTOR_RR_IN2, 0);
 }
 
 void Motors::moveRight(int speed) {
-    setMotor(MOTOR_FL_IN1, MOTOR_FL_IN2, speed);
+    setMotor(MOTOR_FL_IN1, MOTOR_FL_IN2, 0);
     setMotor(MOTOR_FR_IN1, MOTOR_FR_IN2, -speed);
-    setMotor(MOTOR_RL_IN1, MOTOR_RL_IN2, -speed);
-    setMotor(MOTOR_RR_IN1, MOTOR_RR_IN2, speed);
+    setMotor(MOTOR_RL_IN1, MOTOR_RL_IN2, speed);
+    setMotor(MOTOR_RR_IN1, MOTOR_RR_IN2, 0);
 }
 
 void Motors::stop() {
