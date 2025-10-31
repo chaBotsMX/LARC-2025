@@ -161,18 +161,20 @@ void executeStateMachine() {
 
 void pruebaMovimiento() {
     Serial.println("Iniciando prueba de movimiento");
-    
+    delay(5000);
+        Serial.println("No more time");
+
     movement.moveForwardStraight(BASE_SPEED);
-    delay(4000);
+    delay(100);
     
     movement.moveBackwardStraight(BASE_SPEED);
-    delay(4000);
+    delay(1000);
     
     movement.moveLeftStraight(BASE_SPEED);
-    delay(4000);
+    delay(1000);
     
     movement.moveRightStraight(BASE_SPEED);
-    delay(4000);
+    delay(1000);
     
     motors.stop();
     Serial.println("Prueba de movimiento completada");
