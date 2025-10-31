@@ -8,6 +8,18 @@ void LineFollowing::init() {
     linePID = PID(2.0, 0.1, 0.5, -100, 100);
 }
 
+bool LineFollowing::reachedRightLine() {
+    //en realidad dice si el FR detectó la línea
+    LineSensorData line = sensors.getLineSensors();
+    return line.frontRight;
+    
+}
+
+bool LineFollowing::reachedLeftLine() {
+    LineSensorData line = sensors.getLineSensors();
+    return line.frontLeft;
+}
+
 void LineFollowing::setPIDGains(float kp, float ki, float kd) {
     linePID.setGains(kp, ki, kd);
     Serial.print("PID configurado: Kp=");

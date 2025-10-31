@@ -12,13 +12,12 @@ public:
     
     // Brazo
     void setArmPosition(int angle);
-    void extendArm();
+    void raiseArm();
     void retractArm();
-    void positionArmForLevel(TreeLevel level);
     
-    // Elevator
-    void raiseElevator();
-    void lowerElevator();
+    // Pisos
+    void grabFirstLevel();
+    void grabSecondLevel();
     
     // Carousel
     void rotateCarouselTo(int angle);

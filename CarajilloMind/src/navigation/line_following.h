@@ -3,12 +3,16 @@
 
 #include "../hardware/motors.h"
 #include "../hardware/sensors.h"
-#include "../utils/pid.h" 
+#include "../utils/pid.h"
 #include "../config.h"
 
 class LineFollowing {
 public:
     void init();
+
+    //Detección de líneas
+    bool reachedRightLine();
+    bool reachedLeftLine();
     
     // Seguimiento de línea básico
     void followLineForward(int speed, unsigned long maxDuration = 0);

@@ -82,7 +82,7 @@ void Sensors::selectMuxChannel(uint8_t channel) {
     Wire.endTransmission();
 }
 
-/*
+
 void Sensors::updateAll() {
     // Actualizar sensores de línea
     lineData.frontLeft = readLineSensor(LINE_FRONT_LEFT);
@@ -90,6 +90,7 @@ void Sensors::updateAll() {
     lineData.rearLeft = readLineSensor(LINE_REAR_LEFT);
     lineData.rearRight = readLineSensor(LINE_REAR_RIGHT);
     
+    /* 
     // Actualizar sensores de distancia ToF
     distanceData.frontLeft = readToF(MUX_TOF_FL, tofFL);
     distanceData.frontRight = readToF(MUX_TOF_FR, tofFR);
@@ -102,12 +103,13 @@ void Sensors::updateAll() {
     imuData.heading = event.orientation.x;
     imuData.pitch = event.orientation.y;
     imuData.roll = event.orientation.z;
+    */
 }
- */
+ 
 
 bool Sensors::readLineSensor(int pin) {
-    int value = analogRead(pin);
-    return value < LINE_THRESHOLD; // true si detecta línea negra
+    int value = digitalRead(pin);
+    return value ; // true si detecta línea negra
 }
 
 int Sensors::readToF(uint8_t channel, Adafruit_VL53L0X &sensor) {

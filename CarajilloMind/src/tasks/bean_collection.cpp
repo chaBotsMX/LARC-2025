@@ -36,7 +36,7 @@ bool BeanCollection::isBeanPresent() {
 void BeanCollection::grabBean() {
     mechanisms.openGripper();
     delay(300);
-    mechanisms.extendArm();
+    //mechanisms.extendArm();
     delay(500);
     mechanisms.closeGripper();
     delay(500);
@@ -48,11 +48,9 @@ void BeanCollection::storeBean(BeanType type) {
     // Mover a posición de almacenamiento según tipo
     mechanisms.positionCarouselForBean(type);
     delay(300);
-    mechanisms.raiseElevator();
     delay(500);
     mechanisms.openGripper();
     delay(300);
-    mechanisms.lowerElevator();
     delay(500);
     
     // Actualizar contadores
@@ -95,7 +93,7 @@ void BeanCollection::collectFromLevel(TreeLevel level) {
     Serial.println(level);
     
     // Posicionar brazo para el nivel
-    mechanisms.positionArmForLevel(level);
+    //mechanisms.positionArmForLevel(level);
     delay(500);
     
     // Número de granos por nivel (según las reglas)

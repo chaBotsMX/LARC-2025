@@ -20,6 +20,7 @@ struct DistanceSensorData {
     int frontRight;
     int rearLeft;
     int rearRight;
+    //int flipper;
 };
 
 struct ColorSensorData {

@@ -3,6 +3,7 @@
 
 #include "../hardware/motors.h"
 #include "../hardware/sensors.h"
+#include "../navigation/line_following.h"
 #include "../utils/pid.h"  // NUEVO
 #include "../config.h"
 

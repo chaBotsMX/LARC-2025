@@ -9,6 +9,7 @@ void Movement::init() {
     updateTargetHeading();
 }
 
+/*
 void Movement::setHeadingPIDGains(float kp, float ki, float kd) {
     headingPID.setGains(kp, ki, kd);
     Serial.print("Heading PID configurado: Kp=");
@@ -47,13 +48,10 @@ float Movement::calculateHeadingCorrectionPID() {
     
     return headingPID.compute(error);
 }
-
+*/
 
 void Movement::moveForwardStraight(int speed) {
-    motors.moveForward(speed);
-    delay(3000);
-    motors.stop();
-    /*
+    
     unsigned long startTime = 0;
     static bool running = false;
 
@@ -67,7 +65,6 @@ void Movement::moveForwardStraight(int speed) {
         motors.stop();
         running = false;
     }
-        */
 }
 
 void Movement::moveBackwardStraight(int speed) {
@@ -120,6 +117,73 @@ void Movement::moveRightStraight(int speed) {
     
 }   
 
+void Movement::moveRightUntilRightLineFollowingLine(int speed) {
+    static bool running = false;
+    static unsigned long searchTimer = 0;
+    static enum State { MOVING, SEARCHING } state = MOVING;
+
+    LineSensorData ls = sensors.getLineSensors();
+    bool RL = ls.rearLeft;
+    bool RR = ls.rearRight;
+
+    // Condición de parada
+    if (lineFollowing.reachedRightLine()) {
+        motors.stop();
+        running = false;
+        state = MOVING;   // reset
+        return;
+    }
+
+    if (!running) {
+        running = true;
+        motors.moveRight(speed);
+        return;
+    }
+
+    switch (state) {
+        // ==========================
+        case MOVING:
+        // ==========================
+            // Caso ideal: centrado
+            if (RL && RR) {
+                motors.moveRight(speed);
+            }
+
+            // Línea ligeramente a la izquierda
+            else if (RL && !RR) {
+                motors.moveForward(speed * 0.6);
+            }
+
+            // Línea ligeramente a la derecha
+            else if (!RL && RR) {
+                motors.moveBackward(speed * 0.6);
+            }
+
+            // Perdió la línea
+            else if (!RL && !RR) {
+                state = SEARCHING;
+                searchTimer = millis();
+            }
+            break;
+
+        // ==========================
+        case SEARCHING:
+        // ==========================
+            // Busca adelante primero
+            motors.moveForward(speed * 0.4);
+
+            // Si no la encuentra en 400ms, intenta atrás
+            if (millis() - searchTimer > 400) {
+                motors.moveBackward(speed * 0.4);
+            }
+
+            // ¿La recuperó?
+            if (RL || RR) {
+                state = MOVING;
+            }
+            break;
+    }
+}
 
 /*
 void Movement::moveRightStraightPID(int speed) {
