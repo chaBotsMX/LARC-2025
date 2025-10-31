@@ -7,20 +7,20 @@
 // PINES DE MOTORES
 // ============================================
 // Motor Front Left
-#define MOTOR_FL_IN1 11
-#define MOTOR_FL_IN2 10
+#define MOTOR_FL_IN1 0
+#define MOTOR_FL_IN2 1
 
 // Motor Front Right
-#define MOTOR_FR_IN1 9
-#define MOTOR_FR_IN2 8
+#define MOTOR_FR_IN1 2
+#define MOTOR_FR_IN2 3
 
 // Motor Rear Left
-#define MOTOR_RL_IN1 7
-#define MOTOR_RL_IN2 6
+#define MOTOR_RL_IN1 4
+#define MOTOR_RL_IN2 5
 
 // Motor Rear Right
-#define MOTOR_RR_IN1 5
-#define MOTOR_RR_IN2 4
+#define MOTOR_RR_IN1 6
+#define MOTOR_RR_IN2 7
 
 // Stepper Motor (DRV8834)
 #define STEPPER_STEP 15

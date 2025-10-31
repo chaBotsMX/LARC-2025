@@ -21,7 +21,7 @@ void setup() {
     debug.init();
     Serial.println("Carajillo - chaBots Espresso");
     Serial.println("Inicializando");
-    
+
     // Inicializar hardware
     motors.init();
     Serial.println("✓ Motores inicializados");
@@ -186,7 +186,6 @@ void pruebaMovimiento() {
 void loop() {
     // Ejecutar la máquina de estados
     //executeStateMachine();
-
     pruebaMovimiento();
     
     /*
